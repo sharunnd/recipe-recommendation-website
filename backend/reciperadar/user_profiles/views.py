@@ -24,6 +24,7 @@ def register_user(request):
         return Response({'message': 'User registered successfully!'})
     return Response(serializer.errors, status=400)
 
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_user(request):
@@ -32,5 +33,5 @@ def login_user(request):
     user = authenticate(username=username, password=password)
     if user is not None:
         token, _ = Token.objects.get_or_create(user=user)
-        return Response({'message': 'Logged in successfully!','token': token.key})
+        return Response({'message': 'successfully Logged in!','token': token.key})
     return Response({'message': 'Invalid credentials'}, status=401)
