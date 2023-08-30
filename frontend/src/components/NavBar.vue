@@ -1,9 +1,10 @@
 <template>
-    <nav class="bg-gray-800 p-4">
-      <div class="container mx-auto">
-        <router-link to="/" class="text-white mr-4">Home</router-link>
-        <router-link to="/login" class="text-white mr-4">Login</router-link>
-        <router-link to="/signup" class="text-white">Sign Up</router-link>
+    <nav class="bg-gray-200 p-4 flex items-center justify-center">
+      <h1>RacipeRadar</h1>
+      <div class="container mx-auto ">
+        <router-link to="/" class="text-black mr-4">Home</router-link>
+        <router-link to="/login" class="text-black mr-4">Login</router-link>
+        <router-link to="/signup" class="text-black">Signup</router-link>
       </div>
     </nav>
   </template>
