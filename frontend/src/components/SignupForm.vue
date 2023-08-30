@@ -33,7 +33,7 @@
             Sign Up
           </button>
         </div>
-        <p v-if="successMessage" class="mt-4 text-green-600">{{ successMessage }}</p>
+        <!-- <p v-if="successMessage" class="mt-4 text-green-600">{{ successMessage }}</p> -->
         
       </form>
     </div>
