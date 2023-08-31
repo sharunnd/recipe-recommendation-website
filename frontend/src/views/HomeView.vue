@@ -7,8 +7,9 @@
         alt="home image"
       />
       <div class="absolute inset-0 flex flex-col items-center justify-center">
-        <h1 class="text-6xl font-extrabold text-white">Discover a World of Culinary Inspiration</h1>
-        <button class="mt-4 px-6 py-3 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">Explore</button>
+        <h1 class="text-6xl font-extrabold text-white font-mono">Discover a World of Culinary Inspiration</h1>
+        <h3 class="text-4xl font-extrabold text-gray-100 mt-10 shadow-xl font-mono">Experience AI-Powered Recipe Recommendations</h3>
+        <button class="mt-4 px-6 py-3 bg-orange-500 text-white font-semibold rounded hover:bg-orange-700">Explore</button>
       </div>
     </div>
     <div class="px-4 text-center py-20">
