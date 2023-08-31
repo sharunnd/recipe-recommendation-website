@@ -1,5 +1,5 @@
 <template>
-    <nav class="bg-gray-200 p-4 flex items-center justify-center">
+    <nav class="sticky top-0 z-50 w-full bg-gray-200 p-4 flex items-center justify-center">
       <h1>RacipeRadar</h1>
       <div class="container mx-auto ">
         <router-link to="/" class="text-black mr-4">Home</router-link>
