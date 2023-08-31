@@ -117,3 +117,15 @@ def delete_recipe(request, pk):
     
     recipe.delete()
     return Response({'message': 'Recipe deleted successfully'}, status=204)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_recipe_by_id(request, recipe_id):
+    try:
+        recipe = Recipe.objects.get(id=recipe_id)
+    except Recipe.DoesNotExist:
+        return Response({'message': 'Recipe not found'}, status=404)
+
+    serializer = RecipeSerializer(recipe)
+    return Response(serializer.data)
