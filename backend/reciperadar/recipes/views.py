@@ -104,3 +104,38 @@ def get_all_recipes(request):
     recipes = Recipe.objects.all()
     serializer = RecipeSerializer(recipes, many=True)
     return Response(serializer.data)
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update_recipe(request, pk):  # Change parameter name to 'pk'
+    try:
+        recipe = Recipe.objects.get(id=pk)
+    except Recipe.DoesNotExist:
+        return Response({'message': 'Recipe not found'}, status=404)
+    
+    # Check if the logged-in user is the author of the recipe
+    if request.user.id != recipe.author.id:
+        return Response({'message': 'You do not have permission to update this recipe'}, status=403)
+    
+    serializer = RecipeSerializer(recipe, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'message': 'Recipe updated successfully'})
+    return Response(serializer.errors, status=400)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_recipe(request, pk):
+    try:
+        recipe = Recipe.objects.get(id=pk)
+    except Recipe.DoesNotExist:
+        return Response({'message': 'Recipe not found'}, status=404)
+    
+    # Check if the logged-in user is the author of the recipe
+    if request.user.id != recipe.author.id:
+        return Response({'message': 'You do not have permission to delete this recipe'}, status=403)
+    
+    recipe.delete()
+    return Response({'message': 'Recipe deleted successfully'}, status=204)
