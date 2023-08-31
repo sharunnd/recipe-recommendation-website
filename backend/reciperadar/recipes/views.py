@@ -35,7 +35,7 @@ def get_recipe_suggestions(request: Request):
         ingredients = request.data.get('ingredients_list', [])
         placeholder_ingredients = ', '.join([f'ingredient {i + 1}' for i in range(len(ingredients))])
         
-        prompt = f"Generate 5 recipes suggestions based on ingredients {placeholder_ingredients}, and mention the quantity for each ingredient. e.g. 1 cup ingredient name 1, 1/2 cup ingredient name 2 etc. Generate at least 5 different types of recipes based on the ingredients given: {', '.join(ingredients)}"
+        prompt = f"Generate 5 recipes suggestions based on ingredients {placeholder_ingredients}, and mention the quantity for each ingredient. e.g. 1 cup ingredient name 1, 1/2 cup ingredient name 2 etc. Generate at least 5 different types of recipes based on the ingredients given and give : (colon)after the heading of each recipe: {', '.join(ingredients)}"
         
         response = openai.Completion.create(
             engine="text-davinci-003",  
@@ -51,17 +51,17 @@ def get_recipe_suggestions(request: Request):
           
         recipes = parse_suggestions(suggestions)
         
-        return Response({'recipes': recipes})
+        return Response({'suggestions':suggestions,'recipes': recipes})
 
 def parse_suggestions(suggestions):
     recipe_list = []
     suggestions = suggestions.strip().split('\n\n')
     
     for suggestion in suggestions:
-        parts = suggestion.split('. ')
+        parts = suggestion.split(':')
         if len(parts) >= 2:
-            heading = parts[1].split(': ', 1)[0].strip()
-            ingredients = ". ".join(parts[1].split(': ', 1)[1:]).strip()
+            heading = parts[0].strip()
+            ingredients = parts[1].strip() if len(parts) > 1 else ""
             
             recipe = {
                 "heading": heading,
