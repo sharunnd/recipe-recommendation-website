@@ -6,9 +6,16 @@ import re
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
 from rest_framework.request import Request
+from rest_framework.permissions import IsAuthenticated
+from .serializers import RecipeSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework import status
+from .models import Recipe
 from typing import List, Dict
+
+
 # @api_view(['POST'])
 # def get_recipe_suggestions(request: Request):
 #     if request.method == 'POST':
@@ -75,3 +82,25 @@ def parse_suggestions(suggestions):
     }
     
     return response
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_recipe(request):
+    data = {
+        'heading': request.data.get('heading'),
+        'ingredients': request.data.get('ingredients'),
+        'author': request.user.id  # Use authenticated user as the author
+    }
+    serializer = RecipeSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'message': 'Recipe created successfully'}, status=201)
+    return Response(serializer.errors, status=400)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_all_recipes(request):
+    recipes = Recipe.objects.all()
+    serializer = RecipeSerializer(recipes, many=True)
+    return Response(serializer.data)
