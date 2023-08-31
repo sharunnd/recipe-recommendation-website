@@ -9,6 +9,7 @@ from .serializers import UserSerializer
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 
+#register user
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
