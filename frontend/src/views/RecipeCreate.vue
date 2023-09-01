@@ -5,7 +5,7 @@
       <form @submit.prevent="submitRecipe">
         <div class="mb-4">
           <label for="heading" class="block text-sm font-medium text-gray-600"
-            >Heading:</label
+            >Recipe Name:</label
           >
           <input
             v-model="recipe.heading"
@@ -92,7 +92,7 @@ export default {
           console.error("Failed to create recipe");
         }
       } catch (error) {
-        toast.success("Something went wrong", {
+        toast.error("Something went wrong", {
           autoClose: 1000,
         });
         console.error("Error creating recipe:", error);
