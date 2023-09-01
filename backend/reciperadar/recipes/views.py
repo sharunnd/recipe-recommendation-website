@@ -32,7 +32,7 @@ def get_recipe_suggestions(request: Request):
         )
         
         suggestions = response.choices[0].text.strip()
-          
+        print(suggestions)
         recipes = parse_suggestions(suggestions)
         
         return Response({'suggestions':suggestions,'recipes': recipes})
@@ -67,7 +67,7 @@ def create_recipe(request):
     data = {
         'heading': request.data.get('heading'),
         'ingredients': request.data.get('ingredients'),
-        'author': request.user.id,  # Use authenticated user as the author
+        'author': request.user.id,  
         'image_url': request.data.get('image_url')
     }
     serializer = RecipeSerializer(data=data)
@@ -86,7 +86,7 @@ def get_all_recipes(request):
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
-def update_recipe(request, pk):  # Change parameter name to 'pk'
+def update_recipe(request, pk):  
     try:
         recipe = Recipe.objects.get(id=pk)
     except Recipe.DoesNotExist:
