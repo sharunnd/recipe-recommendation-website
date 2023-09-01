@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { createApp } from 'vue';
+
 export default createStore({
   state: {
     recipeDetails: null,
@@ -31,11 +31,16 @@ export default createStore({
             },
           });
           if (response.ok) {
-            commit("clearRecipeDetails");
-            createApp().config.globalProperties.$router.push('/'); // Emit event to navigate
-          } else {
-            console.error("Error deleting recipe");
-          }
+      // Recipe deleted successfully, commit the mutation to clear recipeDetails
+      commit("clearRecipeDetails");
+      return response; // Return the response to handle success message in the component
+    } else if (response.status === 403) {
+      // Permission issue, throw an error with status 403
+      throw new Error("Permission denied");
+    } else {
+      // Handle other errors
+      throw new Error(`Error deleting recipe: ${response.statusText}`);
+    }
       } catch (error) {
         console.error("Error deleting recipe:", error);
       }
