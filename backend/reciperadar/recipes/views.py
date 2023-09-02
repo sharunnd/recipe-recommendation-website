@@ -9,10 +9,11 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.request import Request
 from rest_framework.permissions import IsAuthenticated
-from .serializers import RecipeSerializer
+from .serializers import RecipeSerializer,ReviewSerializer,RatingSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework import status
-from .models import Recipe
+from .models import Recipe,Review,Rating
+from django.db.models import Avg
 from typing import List, Dict
 
 
@@ -129,3 +130,70 @@ def get_recipe_by_id(request, recipe_id):
 
     serializer = RecipeSerializer(recipe)
     return Response(serializer.data)
+
+
+# Create a review for a recipe
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_review(request, recipe_id):
+    user = request.user
+    try:
+        recipe = Recipe.objects.get(pk=recipe_id)
+    except Recipe.DoesNotExist:
+        return Response({'message': 'Recipe not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    comment = request.data.get('comment')
+    rating_value = request.data.get('rating')
+
+    # Create the review using the user ID
+    review = Review.objects.create(user=user, recipe=recipe, comment=comment)
+
+    return Response({'message': 'Review created successfully'}, status=status.HTTP_201_CREATED)
+
+
+# Create a rating for a recipe
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_rating(request, recipe_id):
+    user = request.user
+    try:
+        recipe = Recipe.objects.get(pk=recipe_id)
+    except Recipe.DoesNotExist:
+        return Response({'message': 'Recipe not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    rating_value = request.data.get('rating')
+
+    # Create the rating using the user ID
+    rating = Rating.objects.create(user=user, recipe=recipe, rating=rating_value)
+
+    # Update the average rating for the recipe
+    recipe_rating = Rating.objects.filter(recipe=recipe).aggregate(Avg('rating'))
+    recipe.average_rating = recipe_rating['rating__avg']  # Use 'rating__avg' to access the calculated average
+    recipe.save()
+
+    return Response({'message': 'Rating created successfully'}, status=status.HTTP_201_CREATED)
+
+
+
+@api_view(['GET'])
+def get_reviews(request, recipe_id):
+    try:
+        recipe = Recipe.objects.get(id=recipe_id)
+    except Recipe.DoesNotExist:
+        return Response({'message': 'Recipe not found'}, status=404)
+
+    reviews = Review.objects.filter(recipe=recipe)
+    serializer = ReviewSerializer(reviews, many=True)
+    return Response({'message': 'Reviews retrieved successfully', 'reviews': serializer.data})
+
+
+@api_view(['GET'])
+def get_ratings(request, recipe_id):
+    try:
+        recipe = Recipe.objects.get(id=recipe_id)
+    except Recipe.DoesNotExist:
+        return Response({'message': 'Recipe not found'}, status=404)
+
+    ratings = Rating.objects.filter(recipe=recipe)
+    serializer = RatingSerializer(ratings, many=True)
+    return Response({'message': 'Ratings retrieved successfully', 'ratings': serializer.data})
