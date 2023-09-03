@@ -11,7 +11,7 @@ class Recipe(models.Model):
     heading = models.CharField(max_length=255)
     ingredients = models.TextField()
     image_url = models.URLField(blank=True, null=True)
-    average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
+    average_rating = models.DecimalField(max_digits=3, decimal_places=1, default=0.0)
     num_reviews = models.PositiveIntegerField(default=0)
 
     def __str__(self):
@@ -21,7 +21,7 @@ class Recipe(models.Model):
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    rating = models.IntegerField()  # You can choose an appropriate field type for ratings
+    rating = models.DecimalField(max_digits=3, decimal_places=1)  # You can choose an appropriate field type for ratings
 
     def __str__(self):
         return f"{self.user.username}'s rating for {self.recipe.heading}"
