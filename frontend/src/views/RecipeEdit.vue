@@ -1,52 +1,98 @@
 <template>
-    <div>
-      <h1>Edit Recipe</h1>
-      <form @submit.prevent="submitUpdatedRecipe">
-        <label for="heading">Heading</label>
-        <input v-model="updatedRecipe.heading" type="text" id="heading" />
-        <label for="ingredients">Ingredients</label>
-        <textarea v-model="updatedRecipe.ingredients" id="ingredients"></textarea>
-        <button type="submit">Update Recipe</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  import { mapActions, mapGetters } from "vuex";
-  
-  export default {
-    computed: {
-      ...mapGetters(["recipeDetails"]),
-      originalRecipe() {
-        return this.recipeDetails || {};
+  <div>
+    <!-- Display form for editing recipe data -->
+    <form @submit.prevent="onUpdateRecipe">
+      <div class="mb-4">
+        <label for="title" class="block text-gray-700 font-bold mb-2">Title</label>
+        <input
+          type="text"
+          id="title"
+          v-model="updatedRecipeData.heading"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          required
+        />
+      </div>
+      <div class="mb-4">
+        <label for="description" class="block text-gray-700 font-bold mb-2">Description</label>
+        <textarea
+          id="description"
+          v-model="updatedRecipeData.ingredients"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          rows="4"
+          required
+        ></textarea>
+      </div>
+      <!-- Add other form fields for updating recipe properties -->
+
+      <div class="flex items-center justify-between">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          Update Recipe
+        </button>
+      </div>
+    </form>
+  </div>
+</template>
+
+<script>
+import { mapActions, mapGetters } from "vuex";
+import { toast } from "vue3-toastify";
+
+export default {
+  data() {
+    return {
+      updatedRecipeData: {
+        heading: "", // Initialize with empty values
+        ingredients: "",
+        // Add other properties here
       },
+    };
+  },
+  created() {
+    // Fetch the initial recipe data when the component is created
+    this.fetchRecipeData();
+  },
+  computed: {
+    ...mapGetters(["recipeDetails"]),
+    recipe() {
+      return this.recipeDetails || {};
     },
-    data() {
-      return {
-        updatedRecipe: {
-          heading: "",
-          ingredients: "",
-        },
+  },
+  methods: {
+    ...mapActions(["fetchRecipeDetails", "updateRecipe"]),
+    async fetchRecipeData() {
+      const recipeId = this.$route.params.id;
+      await this.fetchRecipeDetails(recipeId);
+
+      // Populate updatedRecipeData with the fetched data
+      this.updatedRecipeData = {
+        heading: this.recipe.heading || "",
+        ingredients: this.recipe.ingredients || "",
+        // Add other properties here
       };
     },
-    methods: {
-      ...mapActions(["fetchRecipeDetails", "updateRecipe"]),
-      async fetchRecipeData() {
-        const recipeId = this.$route.params.id;
-        await this.fetchRecipeDetails(recipeId);
-        // Populate the form fields with the original recipe data
-        this.updatedRecipe = { ...this.originalRecipe };
-      },
-      async submitUpdatedRecipe() {
-  // Call the updateRecipe action in your Vuex store
-  await this.updateRecipe(this.$route.params.id, this.updatedRecipe);
-  // Redirect back to the recipe details page
-  this.$router.push(`/recipe/details/${this.$route.params.id}`);
-},
+    async onUpdateRecipe() {
+      const recipeId = this.recipe.id;
+      const obj = this.updatedRecipeData
+      try {
+        // Call the updateRecipe action with updated data
+        console.log(recipeId,obj);
+        await this.updateRecipe(recipeId, this.updatedRecipeData);
+        console.log("after",recipeId,obj);
+        toast.success("Recipe updated successfully", {
+          autoClose: 1000,
+        });
+        this.$router.push(`/recipe/${recipeId}`);
+      } catch (error) {
+        toast.error("Something went wrong!", {
+          autoClose: 1000,
+        });
+        console.error("Error updating recipe:", error);
+      }
     },
-    mounted() {
-      this.fetchRecipeData();
-    },
-  };
-  </script>
-  
+  },
+};
+</script>
+
+<style scoped>
+/* Your styling here */
+</style>
