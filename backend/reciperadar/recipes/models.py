@@ -30,8 +30,11 @@ class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     comment = models.TextField()
+    user_name = models.CharField(max_length=255)  # Add this field for the user's name
 
     def save(self, *args, **kwargs):
+        if not self.user_name:
+            self.user_name = self.user.username  # Set user_name to the username if not provided
         super().save(*args, **kwargs)
         # Increment the num_reviews field of the associated recipe
         self.recipe.num_reviews += 1
