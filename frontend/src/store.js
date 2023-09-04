@@ -3,6 +3,8 @@ import { createStore } from "vuex";
 export default createStore({
   state: {
     recipeDetails: null,
+    recipeComments: [],
+    isLoggedIn: !!localStorage.getItem("token"), // Check if the token exists in local storage
   },
   mutations: {
     setRecipeDetails(state, recipe) {
@@ -10,6 +12,15 @@ export default createStore({
     },
     clearRecipeDetails(state) {
       state.recipeDetails = null;
+    },
+    setToastMessage(state, message) {
+      state.toastMessage = message;
+    },
+    setRecipeComments(state, comments) {
+      state.recipeComments = comments;
+    },
+    setLoggedIn(state, value) {
+      state.isLoggedIn = value;
     },
   },
   actions: {
@@ -20,6 +31,15 @@ export default createStore({
         commit("setRecipeDetails", data);
       } catch (error) {
         console.error("Error fetching recipe details:", error);
+      }
+    },
+    async fetchRecipeComments({ commit }, recipeId) {
+      try {
+        const response = await fetch(`http://localhost:8000/api/recipe/get/reviews/${recipeId}/`);
+        const data = await response.json();
+        commit("setRecipeComments", data); // Mutation to set comments in the state
+      } catch (error) {
+        console.error("Error fetching comments:", error);
       }
     },
     async deleteRecipe({ commit }, recipeId) {
@@ -68,7 +88,7 @@ export default createStore({
         console.error("Error updating recipe:", error);
       }
     },
-    async createReview({ commit }, { recipeId, comment }) {
+    async createReview({ commit,dispatch  }, { recipeId, comment }) {
       try {
         const response = await fetch(`http://localhost:8000/api/recipe/reviews/${recipeId}/`, {
           method: "POST",
@@ -79,10 +99,15 @@ export default createStore({
           body: JSON.stringify({ comment }),
         });
         if (response.ok) {
+          await dispatch("fetchRecipeComments", recipeId); // Assuming you have the "fetchRecipeComments" action
           // You can handle success actions here if needed
-          return response;
+           const res = await response.json();
+           commit("setToastMessage", res);
+          //  commit("setRecipeComments", res);
+           return res
         } else {
-          commit
+          commit("setToastMessage", null);
+          // commit("setRecipeComments", null);
           throw new Error(`Error creating review: ${response.statusText}`);
         }
       } catch (error) {
@@ -102,17 +127,21 @@ export default createStore({
         });
         if (response.ok) {
           // You can handle success actions here if needed
-          return response;
+          const res = await response.json();
+          commit("setToastMessage", res);
+          return res
         } else {
-          commit
+          commit("setToastMessage", null);
           throw new Error(`Error creating rating: ${response.statusText}`);
         }
       } catch (error) {
         console.error("Error creating rating:", error);
+        commit("setBackendMessage", null); // Clear the previous message
       }
     },
   },
   getters: {
     recipeDetails: (state) => state.recipeDetails,
+    recipeComments: (state) => state.recipeComments,
   },
 });

@@ -80,15 +80,19 @@ export default {
         });
         const responseData = await response.json();
 
-        toast.success(responseData.message, {
-          autoClose: 1000,
-        });
+        
 
         if (response.ok) {
+          toast.success(responseData.message, {
+          autoClose: 1000,
+          });
           setTimeout(() => {
             this.$router.push("/");
           }, 2000); // Redirect to home page after successful creation
         } else {
+          toast.error("Please Login!", {
+          autoClose: 1000,
+        });
           console.error("Failed to create recipe");
         }
       } catch (error) {
