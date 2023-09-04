@@ -132,7 +132,6 @@ def get_recipe_by_id(request, recipe_id):
     return Response(serializer.data)
 
 
-# Create a review for a recipe
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_review(request, recipe_id):
@@ -144,9 +143,10 @@ def create_review(request, recipe_id):
 
     comment = request.data.get('comment')
     rating_value = request.data.get('rating')
+    user_name = request.data.get('user_name')  # Get the user's name from the request data
 
-    # Create the review using the user ID
-    review = Review.objects.create(user=user, recipe=recipe, comment=comment)
+    # Create the review using the user ID and user name
+    review = Review.objects.create(user=user, recipe=recipe, comment=comment, user_name=user_name)
 
     return Response({'message': 'Review created successfully'}, status=status.HTTP_201_CREATED)
 
@@ -171,7 +171,7 @@ def create_rating(request, recipe_id):
     recipe.average_rating = recipe_rating['rating__avg']  # Use 'rating__avg' to access the calculated average
     recipe.save()
 
-    return Response({'message': 'Rating created successfully'}, status=status.HTTP_201_CREATED)
+    return Response({'message': 'Rating added successfully'}, status=status.HTTP_201_CREATED)
 
 
 
