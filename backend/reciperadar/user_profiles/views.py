@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
 from .serializers import UserSerializer
+from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 
@@ -22,7 +23,7 @@ def register_user(request):
         user.set_password(password)
         user.save()
 
-        return Response({'message': 'User registered successfully!'})
+        return Response({'message': 'User registered successfully!'},status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=400)
 
 

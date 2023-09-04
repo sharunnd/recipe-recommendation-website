@@ -36,7 +36,7 @@ def get_recipe_suggestions(request: Request):
         print(suggestions)
         recipes = parse_suggestions(suggestions)
         
-        return Response({'suggestions':suggestions,'recipes': recipes})
+        return Response({'recipes': recipes})
 
 def parse_suggestions(suggestions):
     recipe_list = []
@@ -197,3 +197,5 @@ def get_ratings(request, recipe_id):
     ratings = Rating.objects.filter(recipe=recipe)
     serializer = RatingSerializer(ratings, many=True)
     return Response({'message': 'Ratings retrieved successfully', 'ratings': serializer.data})
+
+

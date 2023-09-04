@@ -91,7 +91,15 @@ DATABASES = {
         'PASSWORD': os.getenv('DATABASE_PASSWORD'),
         'HOST': 'localhost',
         'PORT': '3306',
-    }
+    },
+    'test': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('TEST_DATABASE_NAME'),  # Separate test database
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '3306',
+    },
 }
 
 
