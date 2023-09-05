@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-center border min-h-screen">
-    <div class="recipe-create p-4 bg-white rounded-lg shadow-md w-1/3">
+    <div class="recipe-create p-4 bg-white rounded-lg shadow-md lg:w-1/3 md:w-1/2 sm:w-250">
       <h1 class="text-2xl font-semibold mb-4 text-center">Create New Recipe</h1>
       <form @submit.prevent="submitRecipe">
         <div class="mb-4">

@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center justify-center p-5">
-      <div class="bg-white rounded-lg shadow-md p-4 space-y-4 w-1/2 border">
-        <h1 class="text-4xl font-extrabold text-center text-[#34a0a4]">Unleash Culinary Creativity with AI</h1>
+      <div class="bg-white rounded-lg shadow-md p-4 space-y-4 lg:w-1/2 sm:w-full border">
+        <h1 class="lg:text-4xl md:text-2xl sm:text-1xl font-extrabold text-center text-[#34a0a4]">Unleash Culinary Creativity with AI</h1>
         <textarea
           v-model="ingredientsInput"
           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-400"
@@ -20,7 +20,7 @@
   
         <!-- Render the fetched recipes below the form -->
         <div v-if="recipes.length > 0" class="border p-5">
-          <h2 class="text-lg font-semibold mb-5 text-[#168aad]">Matching Recipes:</h2>
+          <h2 class="lg:text-lg sm:text-sm font-semibold mb-5 text-[#168aad]">Matching Recipes:</h2>
           <ul class="list-disc pl-4">
             <li v-for="(recipe, index) in recipes" :key="index" class="mb-4 list-none">
               <h3 class="text-xl font-semibold">{{ recipe.heading }}</h3>
