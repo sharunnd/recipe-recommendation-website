@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <!-- Display form for editing recipe data -->
-    <form @submit.prevent="onUpdateRecipe">
-      <div class="mb-4">
+  <div class="flex items-center justify-center min-h-screen">
+   <div class="w-full lg:w-1/2 md:w-250 sm:w-full md:px-10 sm:px-10">
+    <form @submit.prevent="onUpdateRecipe" class="w-full">
+      <div class="mb-4 ">
         <label for="title" class="block text-gray-700 font-bold mb-2">Title</label>
         <input
           type="text"
@@ -22,14 +22,14 @@
           required
         ></textarea>
       </div>
-      <!-- Add other form fields for updating recipe properties -->
 
       <div class="flex items-center justify-between">
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        <button type="submit" class="bg-[#10A37F] hover:bg-[#3ca48a] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
           Update Recipe
         </button>
       </div>
     </form>
+   </div>
   </div>
 </template>
 
@@ -43,12 +43,10 @@ export default {
       updatedRecipeData: {
         heading: "", // Initialize with empty values
         ingredients: "",
-        // Add other properties here
       },
     };
   },
   created() {
-    // Fetch the initial recipe data when the component is created
     this.fetchRecipeData();
   },
   computed: {
@@ -67,23 +65,25 @@ export default {
       this.updatedRecipeData = {
         heading: this.recipe.heading || "",
         ingredients: this.recipe.ingredients || "",
-        // Add other properties here
       };
     },
     async onUpdateRecipe() {
       const recipeId = this.recipe.id;
-      const obj = this.updatedRecipeData
+      const updatedRecipeData = this.updatedRecipeData; // Get the updated data
       try {
-        // Call the updateRecipe action with updated data
-        console.log(recipeId,obj);
-        await this.updateRecipe(recipeId, this.updatedRecipeData);
-        console.log("after",recipeId,obj);
-        toast.success("Recipe updated successfully", {
-          autoClose: 1000,
-        });
-        this.$router.push(`/recipe/${recipeId}`);
+        const response = await this.updateRecipe({ recipeId, updatedRecipeData });
+        if (response.ok) {
+          toast.success("Recipe updated successfully", {
+            autoClose: 1000,
+          });
+        } else {
+          toast.error("Something went wrong!", {
+            autoClose: 1000,
+          });
+          console.error("Error updating recipe:", response.statusText);
+        }
       } catch (error) {
-        toast.error("Something went wrong!", {
+        toast.error("You are not allowed to do this action!", {
           autoClose: 1000,
         });
         console.error("Error updating recipe:", error);

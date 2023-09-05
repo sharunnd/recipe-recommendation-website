@@ -65,9 +65,8 @@ export default createStore({
         console.error("Error deleting recipe:", error);
       }
     },
-    async updateRecipe({ commit }, recipeId, updatedRecipeData) {
+    async updateRecipe({ commit }, { recipeId, updatedRecipeData }) {
       try {
-        console.log("...updated..",recipeId,updatedRecipeData);
         const response = await fetch(`http://localhost:8000/api/update_recipe/${recipeId}/`, {
           method: "PATCH",
           headers: {
@@ -76,12 +75,10 @@ export default createStore({
           },
           body: JSON.stringify(updatedRecipeData),
         });
-        console.log(response);
         if (response.ok) {
           commit("clearRecipeDetails");
-          return response; // Return the response to handle success message in the component
+          return response;
         } else {
-          // Handle other errors
           throw new Error(`Error updating recipe: ${response.statusText}`);
         }
       } catch (error) {
