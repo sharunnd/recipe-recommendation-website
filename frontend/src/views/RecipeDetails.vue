@@ -3,13 +3,13 @@
     <!-- Check if recipe data is available -->
     <div
       v-if="recipe.image_url"
-      class="bg-white shadow-lg rounded-lg px-40 py-10 mx-10 mt-10"
+      class="bg-white shadow-lg rounded-lg lg:px-40 md:px-30 sm:px-10 lg:py-10 md:py-10 sm:py-10 lg:mx-10 md:mx-10 sm:mx-10 lg:mt-10 md:mt-10 sm:mt-10"
     >
       <img
         v-if="recipe.image_url"
         :src="recipe.image_url"
         alt="Recipe Image"
-        class="w-full h-80 object-cover mb-4"
+        class="w-full lg:h-80 sm:h-50 object-cover mb-4"
       />
       <h2 class="text-xl font-semibold mb-2">{{ recipe.heading }}</h2>
       <div class="flex">
