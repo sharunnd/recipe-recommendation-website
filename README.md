@@ -112,6 +112,9 @@ RecipeRadar represents a fusion of technology and culinary artistry, aiming to m
 - **Endpoint:** `/api/recipe/get/ratings/<int:recipe_id>/`
 - **Description:** Get ratings for a specific recipe.
 - **Method:** GET
+## Data model diagrams
+
+![6tr7 drawio](https://github.com/sharunnd/recipe-radar/assets/119393327/272ee080-c364-452a-8c0e-86f8abf1c3d1)
 
 ## Home Page
 
