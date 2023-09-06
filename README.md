@@ -1,10 +1,6 @@
 # RecipeRadar
 
-
 RecipeRadar leverages generative AI to curate a personalized cooking experience. Discover recipes aligned with your unique tastes and dietary preferences, all with the help of AI-powered recommendations.
-
-
-# To visit the website [Click here]()
 
 ## Project Overview
 
