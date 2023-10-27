@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center justify-center p-5">
+    <div class="flex items-center justify-center p-5 mb-50">
       <div class="bg-white rounded-lg shadow-md p-4 space-y-4 lg:w-1/2 sm:w-full border">
         <h1 class="lg:text-4xl md:text-2xl sm:text-1xl font-extrabold text-center text-[#34a0a4]">Unleash Culinary Creativity with AI</h1>
         <textarea

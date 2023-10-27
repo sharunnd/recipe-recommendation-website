@@ -4,7 +4,7 @@
   >
     <div class="flex items-center ml-4 md:ml-20">
       <router-link :to="'/'">
-        <h1 class="lg:text-2xl md:text-1xl font-semibold">RacipeRadar</h1>
+        <h1 class="lg:text-2xl md:text-1xl font-semibold">RecipeRadar</h1>
       </router-link>
     </div>
     <div class="md:flex items-center space-x-4 mr-4 md:mr-20">
