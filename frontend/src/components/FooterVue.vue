@@ -5,8 +5,7 @@
           <div class="flex items-center">
             <router-link to="/" class="text-black font-semibold text-lg">
               RecipeRadar
-            </router-link>
-            
+            </router-link>           
             <div class="ml-4 space-x-4 mt-2 sm:mt-0">
               <router-link to="/" class="text-Black hover:text-white">About</router-link>
               <router-link to="/" class="text-Black hover:text-white">Blog</router-link>
